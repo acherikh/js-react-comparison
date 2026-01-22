@@ -556,8 +556,8 @@ Every code example in `demos.js` was:
 
 All performance tests conducted with:
 - **Browser:** Chrome 120.0.6099.109
-- **OS:** macOS 14.2.1 (or your OS)
-- **Hardware:** Apple M1, 8GB RAM (or your specs)
+- **OS:** Ubuntu 24 
+- **Hardware:** 16GB RAM, 512MB SSD
 - **Date:** January 19, 2026
 - **Test iterations:** 5 runs per test, averaged
 
