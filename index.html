@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM vs React: Complete Comparison</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 42px;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    header p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-tabs button {
+      padding: 12px 24px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-tabs button:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.5);
+    }
+
+    .nav-tabs button.active {
+      background: white;
+      color: #1e3c72;
+      border-color: white;
+    }
+
+    .demo-section {
+      display: none;
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .demo-section.active {
+      display: block;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .split-view {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 968px) {
+      .split-view {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      background: #f8fafc;
+    }
+
+    .panel h3 {
+      color: #1e3c72;
+      margin-bottom: 15px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge.vanilla {
+      background: #fbbf24;
+      color: #78350f;
+    }
+
+    .badge.react {
+      background: #60a5fa;
+      color: #1e3a8a;
+    }
+
+    .demo-content {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      min-height: 200px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    .btn-success {
+      background: #10b981;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    input[type="text"], input[type="number"] {
+      padding: 10px 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 14px;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+
+    .list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 15px;
+      background: #f1f5f9;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+
+    .list-item:hover {
+      background: #e2e8f0;
+      transform: translateX(5px);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #3b82f6;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #64748b;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 5px;
+    }
+
+    .performance-log {
+      background: #1e293b;
+      color: #10b981;
+      padding: 15px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 15px;
+    }
+
+    .performance-log div {
+      margin-bottom: 5px;
+    }
+
+    .counter-display {
+      font-size: 48px;
+      font-weight: 700;
+      text-align: center;
+      color: #1e3c72;
+      margin: 20px 0;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .info-box {
+      background: #dbeafe;
+      border-left: 4px solid #3b82f6;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 20px;
+    }
+
+    .info-box strong {
+      color: #1e40af;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .info-box p {
+      color: #1e3a8a;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    code {
+      background: #1e293b;
+      color: #10b981;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎯 DOM vs React: Complete Comparison</h1>
+      <p>Interactive demonstrations of imperative vs declarative programming</p>
+    </header>
+
+    <div class="nav-tabs" id="navTabs">
+      <button data-demo="counter" class="active">Counter Demo</button>
+      <button data-demo="list">Dynamic List</button>
+      <button data-demo="form">Form Handling</button>
+      <button data-demo="reflow">Reflow Performance</button>
+      <button data-demo="events">Event Handling</button>
+      <button data-demo="state">State Management</button>
+    </div>
+
+    <!-- DEMO 1: COUNTER -->
+    <div id="counter" class="demo-section active">
+      <h2>Demo 1: Simple Counter - State Updates</h2>
+      <p style="color: #64748b; margin-bottom: 20px;">
+        This demonstrates how state changes trigger UI updates in both paradigms.
+      </p>
+      
+      <div class="split-view">
+        <!-- Vanilla JS Counter -->
+        <div class="panel">
+          <h3>
+            <span class="badge vanilla">Vanilla JS</span>
+            Imperative Approach
+          </h3>
+          <div class="demo-content">
+            <div class="counter-display" id="vanillaCount">0</div>
+            <div class="controls">
+              <button class="btn btn-danger" id="vanillaDecrement">-1</button>
+              <button class="btn btn-primary" id="vanillaIncrement">+1</button>
+              <button class="btn btn-success" id="vanillaReset">Reset</button>
+            </div>
+            <div class="info-box">
+              <strong>How it works:</strong>
+              <p>Manually update a variable, then explicitly update the DOM element's textContent. State and UI are separate concerns.</p>
+              <code>count++; element.textContent = count;</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- React Counter (Simulated) -->
+        <div class="panel">
+          <h3>
+            <span class="badge react">React</span>
+            Declarative Approach
+          </h3>
+          <div class="demo-content">
+            <div class="counter-display" id="reactCount">0</div>
+            <div class="controls">
+              <button class="btn btn-danger" id="reactDecrement">-1</button>
+              <button class="btn btn-primary" id="reactIncrement">+1</button>
+              <button class="btn btn-success" id="reactReset">Reset</button>
+            </div>
+            <div class="info-box">
+              <strong>How it works:</strong>
+              <p>Update state via setState. React automatically re-renders the component. UI is always in sync with state.</p>
+              <code>setCount(count + 1); // React handles UI</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO 2: DYNAMIC LIST -->
+    <div id="list" class="demo-section">
+      <h2>Demo 2: Dynamic List - DOM Manipulation vs Reconciliation</h2>
+      <p style="color: #64748b; margin-bottom: 20px;">
+        This shows how adding/removing items works and the importance of keys in React.
+      </p>
+      
+      <div class="split-view">
+        <!-- Vanilla JS List -->
+        <div class="panel">
+          <h3>
+            <span class="badge vanilla">Vanilla JS</span>
+            Manual DOM Manipulation
+          </h3>
+          <div class="demo-content">
+            <div class="controls">
+              <input type="text" id="vanillaInput" placeholder="Enter item...">
+              <button class="btn btn-primary" id="vanillaAdd">Add</button>
+              <button class="btn btn-danger" id="vanillaClear">Clear All</button>
+            </div>
+            <div id="vanillaList"></div>
+            <div class="stats">
+              <div class="stat-card">
+                <div class="stat-label">Total Items</div>
+                <div class="stat-value" id="vanillaListCount">0</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">DOM Operations</div>
+                <div class="stat-value" id="vanillaDomOps">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- React List (Simulated) -->
+        <div class="panel">
+          <h3>
+            <span class="badge react">React</span>
+            Virtual DOM Reconciliation
+          </h3>
+          <div class="demo-content">
+            <div class="controls">
+              <input type="text" id="reactInput" placeholder="Enter item...">
+              <button class="btn btn-primary" id="reactAdd">Add</button>
+              <button class="btn btn-danger" id="reactClear">Clear All</button>
+            </div>
+            <div id="reactList"></div>
+            <div class="stats">
+              <div class="stat-card">
+                <div class="stat-label">Total Items</div>
+                <div class="stat-value" id="reactListCount">0</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Renders</div>
+                <div class="stat-value" id="reactRenders">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO 3: FORM HANDLING -->
+    <div id="form" class="demo-section">
+      <h2>Demo 3: Form Handling - Controlled vs Uncontrolled</h2>
+      <p style="color: #64748b; margin-bottom: 20px;">
+        Demonstrates controlled components (React) vs uncontrolled inputs (Vanilla JS).
+      </p>
+      
+      <div class="split-view">
+        <!-- Vanilla JS Form -->
+        <div class="panel">
+          <h3>
+            <span class="badge vanilla">Vanilla JS</span>
+            Uncontrolled Inputs
+          </h3>
+          <div class="demo-content">
+            <form id="vanillaForm">
+              <div class="form-group">
+                <label>Name:</label>
+                <input type="text" id="vanillaName">
+              </div>
+              <div class="form-group">
+                <label>Email:</label>
+                <input type="text" id="vanillaEmail">
+              </div>
+              <div class="checkbox-group">
+                <input type="checkbox" id="vanillaSubscribe">
+                <label for="vanillaSubscribe">Subscribe to newsletter</label>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <div id="vanillaFormOutput" class="info-box" style="display: none; margin-top: 15px;">
+              <strong>Submitted Data:</strong>
+              <div id="vanillaFormData"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- React Form (Simulated) -->
+        <div class="panel">
+          <h3>
+            <span class="badge react">React</span>
+            Controlled Components
+          </h3>
+          <div class="demo-content">
+            <form id="reactForm">
+              <div class="form-group">
+                <label>Name:</label>
+                <input type="text" id="reactName">
+              </div>
+              <div class="form-group">
+                <label>Email:</label>
+                <input type="text" id="reactEmail">
+              </div>
+              <div class="checkbox-group">
+                <input type="checkbox" id="reactSubscribe">
+                <label for="reactSubscribe">Subscribe to newsletter</label>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <div id="reactFormOutput" class="info-box" style="margin-top: 15px;">
+              <strong>Current State (Live):</strong>
+              <div id="reactFormData"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO 4: REFLOW PERFORMANCE -->
+    <div id="reflow" class="demo-section">
+      <h2>Demo 4: Reflow Performance - Batching Updates</h2>
+      <p style="color: #64748b; margin-bottom: 20px;">
+        Shows the performance difference between individual updates vs batched updates.
+      </p>
+      
+      <div class="split-view">
+        <!-- Vanilla JS Reflow -->
+        <div class="panel">
+          <h3>
+            <span class="badge vanilla">Vanilla JS</span>
+            Unbatched Updates
+          </h3>
+          <div class="demo-content">
+            <div class="controls">
+              <input type="number" id="vanillaIterations" value="100" min="10" max="1000">
+              <button class="btn btn-primary" id="vanillaBenchmark">Run Benchmark</button>
+            </div>
+            <div id="vanillaReflowContainer" style="max-height: 300px; overflow-y: auto;"></div>
+            <div class="stats">
+              <div class="stat-card">
+                <div class="stat-label">Execution Time</div>
+                <div class="stat-value" id="vanillaTime">0ms</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Reflows</div>
+                <div class="stat-value" id="vanillaReflows">0</div>
+              </div>
+            </div>
+            <div class="performance-log" id="vanillaLog"></div>
+          </div>
+        </div>
+
+        <!-- React Reflow (Simulated) -->
+        <div class="panel">
+          <h3>
+            <span class="badge react">React</span>
+            Batched Updates
+          </h3>
+          <div class="demo-content">
+            <div class="controls">
+              <input type="number" id="reactIterations" value="100" min="10" max="1000">
+              <button class="btn btn-primary" id="reactBenchmark">Run Benchmark</button>
+            </div>
+            <div id="reactReflowContainer" style="max-height: 300px; overflow-y: auto;"></div>
+            <div class="stats">
+              <div class="stat-card">
+                <div class="stat-label">Execution Time</div>
+                <div class="stat-value" id="reactTime">0ms</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Batched Renders</div>
+                <div class="stat-value" id="reactBatches">1</div>
+              </div>
+            </div>
+            <div class="performance-log" id="reactLog"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO 5: EVENT HANDLING -->
+    <div id="events" class="demo-section">
+      <h2>Demo 5: Event Handling - Direct Listeners vs Event Delegation</h2>
+      <p style="color: #64748b; margin-bottom: 20px;">
+        Compares direct event listeners vs React's synthetic event system.
+      </p>
+      
+      <div class="split-view">
+        <!-- Vanilla JS Events -->
+        <div class="panel">
+          <h3>
+            <span class="badge vanilla">Vanilla JS</span>
+            Direct Event Listeners
+          </h3>
+          <div class="demo-content">
+            <div class="controls">
+              <button class="btn btn-primary" id="vanillaAddButtons">Add 10 Buttons</button>
+              <button class="btn btn-danger" id="vanillaRemoveButtons">Remove All</button>
+            </div>
+            <div id="vanillaButtonContainer"></div>
+            <div class="stats">
+              <div class="stat-card">
+                <div class="stat-label">Event Listeners</div>
+                <div class="stat-value" id="vanillaListeners">0</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Click Count</div>
+                <div class="stat-value" id="vanillaClicks">0</div>
+              </div>
+            </div>
+            <div class="info-box">
+              <strong>Memory Impact:</strong>
+              <p>Each button has its own click listener. Must manually remove listeners to prevent memory leaks.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- React Events (Simulated) -->
+        <div class="panel">
+          <h3>
+            <span class="badge react">React</span>
+            Event Delegation
+          </h3>
+          <div class="demo-content">
+            <div class="controls">
+              <button class="btn btn-primary" id="reactAddButtons">Add 10 Buttons</button>
+              <button class="btn btn-danger" id="reactRemoveButtons">Remove All</button>
+            </div>
+            <div id="reactButtonContainer"></div>
+            <div class="stats">
+              <div class="stat-card">
+                <div class="stat-label">Root Listeners</div>
+                <div class="stat-value">1</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Click Count</div>
+                <div class="stat-value" id="reactClicks">0</div>
+              </div>
+            </div>
+            <div class="info-box">
+              <strong>Memory Impact:</strong>
+              <p>Single listener at root using event delegation. Automatic cleanup when components unmount.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO 6: STATE MANAGEMENT -->
+    <div id="state" class="demo-section">
+      <h2>Demo 6: State Management - Synchronization Issues</h2>
+      <p style="color: #64748b; margin-bottom: 20px;">
+        Demonstrates how state and UI can become desynchronized in imperative code.
+      </p>
+      
+      <div class="split-view">
+        <!-- Vanilla JS State -->
+        <div class="panel">
+          <h3>
+            <span class="badge vanilla">Vanilla JS</span>
+            Manual Synchronization
+          </h3>
+          <div class="demo-content">
+            <div class="controls">
+              <button class="btn btn-primary" id="vanillaUpdateState">Update State Only</button>
+              <button class="btn btn-success" id="vanillaUpdateUI">Update UI Only</button>
+              <button class="btn btn-danger" id="vanillaSync">Sync State & UI</button>
+            </div>
+            <div class="stats">
+              <div class="stat-card">
+                <div class="stat-label">State Value</div>
+                <div class="stat-value" id="vanillaStateValue">0</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">UI Value</div>
+                <div class="stat-value" id="vanillaUIValue">0</div>
+              </div>
+            </div>
+            <div id="vanillaStateWarning" class="info-box" style="display: none; background: #fee2e2; border-color: #ef4444;">
+              <strong style="color: #991b1b;">⚠️ Desynchronization Detected!</strong>
+              <p style="color: #991b1b;">State and UI are out of sync. This is a common bug in imperative code.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- React State (Simulated) -->
+        <div class="panel">
+          <h3>
+            <span class="badge react">React</span>
+            Automatic Synchronization
+          </h3>
+          <div class="demo-content">
+            <div class="controls">
+              <button class="btn btn-primary" id="reactUpdateState">Update State</button>
+              <button class="btn btn-success" id="reactMultiUpdate">Multiple Updates</button>
+            </div>
+            <div class="stats">
+              <div class="stat-card">
+                <div class="stat-label">State Value</div>
+                <div class="stat-value" id="reactStateValue">0</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">UI Value</div>
+                <div class="stat-value" id="reactUIValue">0</div>
+              </div>
+            </div>
+            <div class="info-box" style="background: #d1fae5; border-color: #10b981;">
+              <strong style="color: #065f46;">✓ Always Synchronized</strong>
+              <p style="color: #065f46;">State changes automatically trigger UI updates. Impossible to have desync.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="demos.js"></script>
+</body>
+</html>
