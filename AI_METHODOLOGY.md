@@ -366,7 +366,7 @@ For every technical claim made by the AI, I employed one or more of the followin
 **My Verification Process:**
 ```javascript
 // Test conducted in Chrome DevTools Performance Profiler
-// Hardware: [Your specs - e.g., M1 MacBook Air, 8GB RAM]
+// Hardware: 16GB RAM, 512MB SSD
 // Browser: Chrome 120.0.6099.109
 
 // Unbatched (from demos.js):
@@ -818,6 +818,6 @@ Memory Saved: 499,736 bytes (21.7%)
 
 **End of Methodology Documentation**
 
-**Signed:** [Your Name]  
+**Signed:** [Aksil CHERIKH]  
 **Date:** January 19, 2026  
 **Course:** Advanced Programming – C04
