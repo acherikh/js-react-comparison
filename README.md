@@ -76,7 +76,7 @@ For educational clarity, all demos are in one page with tabs. This allows:
 
 ### Quick Summary
 
-**AI Tool Used:** Claude (Anthropic) - Sonnet 4.5  
+**AI Tool Used:** Claude (Anthropic) - Sonnet 4.5
 **AI Role:** Code generation, theoretical explanations, documentation structure  
 **Student Role:** Verification, explainations, empirical testing, critical analysis  
 

@@ -1,7 +1,7 @@
 # AI Methodology & Verification Documentation
 
 ## Project: DOM vs React - A Comparative Perspective
-**Student:** [User]  
+**Student:** [Aksil CHERIKH]  
 **Course:** Advanced Programming – C04  
 **Date:** January 19, 2026
 
