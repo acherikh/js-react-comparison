@@ -410,6 +410,7 @@ function initReflowDemo() {
       div.style.borderRadius = '4px';
       
       vanillaContainer.appendChild(div); // REFLOW happens here!
+      const height = vanillaContainer.offsetHeight;
     }
 
     const endTime = performance.now();
